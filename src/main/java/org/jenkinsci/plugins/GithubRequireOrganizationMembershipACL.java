@@ -130,7 +130,7 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 
 					String test = parts[parts.length - 1].toLowerCase();
 
-					if (checkReadPermission(permission)
+                    if (checkReadPermission(permission) || permission.getId().equals("hudson.model.Item.Configure")
 							|| testBuildPermission(permission)) {
 						// check the permission
 
