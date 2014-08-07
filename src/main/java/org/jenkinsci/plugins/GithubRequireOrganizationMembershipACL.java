@@ -207,7 +207,7 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 	}
 
 	private boolean testBuildPermission(Permission permission) {
-		if (permission.getId().equals("hudson.model.Hudson.Build")
+        if (permission.getId().equals("hudson.model.Hudson.Build") || permission.getId().equals("hudson.model.Hudson.Cancel")
 				|| permission.getId().equals("hudson.model.Item.Build")) {
 			return true;
 		} else
