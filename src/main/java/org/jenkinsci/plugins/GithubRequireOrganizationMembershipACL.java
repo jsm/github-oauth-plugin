@@ -216,7 +216,6 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 
 	private boolean checkReadPermission(Permission permission) {
 		if (permission.getId().equals("hudson.model.Hudson.Read")
-                || permission.getId().equals("hudson.model.Item.Workspace")
 				|| permission.getId().equals("hudson.model.Item.Read")) {
 			return true;
 		} else
