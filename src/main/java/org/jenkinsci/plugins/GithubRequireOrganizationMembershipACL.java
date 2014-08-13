@@ -28,6 +28,7 @@ package org.jenkinsci.plugins;
 
 import hudson.model.AbstractProject;
 import hudson.model.Item;
+import hudson.model.Hudson;
 import hudson.plugins.git.GitSCM;
 import hudson.plugins.git.UserRemoteConfig;
 import hudson.scm.SCM;
@@ -215,9 +216,9 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 	}
 
 	private boolean checkReadPermission(Permission permission) {
-		if (permission.getId().equals("hudson.model.Hudson.Read")
-				|| permission.getId().equals("hudson.model.Item.ExtendedRead")
-				|| permission.getId().equals("hudson.model.Item.Read")) {
+        if (permission.equals(Hudson.READ)
+            || permission.equals(Item.READ)
+            || permission.equals(Item.EXTENDED_READ)) {
 			return true;
 		} else
 			return false;
@@ -230,6 +231,7 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
             if (authenticatedUserCreateJobPermission) {
                 if (permission.equals(Item.READ) ||
                         permission.equals(Item.CONFIGURE) ||
+                        permission.equals(Item.CANCEL) ||
                         permission.equals(Item.DELETE) ||
                         permission.equals(Item.EXTENDED_READ)) {
                     return true;
