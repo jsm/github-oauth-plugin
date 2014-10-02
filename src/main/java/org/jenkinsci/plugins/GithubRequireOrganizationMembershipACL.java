@@ -28,6 +28,8 @@ package org.jenkinsci.plugins;
 
 import hudson.model.AbstractProject;
 import hudson.model.Item;
+import hudson.model.Job;
+import hudson.model.Hudson;
 import hudson.plugins.git.GitSCM;
 import hudson.plugins.git.UserRemoteConfig;
 import hudson.scm.SCM;
@@ -130,7 +132,7 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 
 					String test = parts[parts.length - 1].toLowerCase();
 
-					if (checkReadPermission(permission)
+                    if (checkReadPermission(permission) || permission.getId().equals("hudson.model.Item.Configure")
 							|| testBuildPermission(permission)) {
 						// check the permission
 
@@ -207,7 +209,7 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 	}
 
 	private boolean testBuildPermission(Permission permission) {
-		if (permission.getId().equals("hudson.model.Hudson.Build")
+        if (permission.getId().equals("hudson.model.Hudson.Build") || permission.getId().equals("hudson.model.Hudson.Cancel")
 				|| permission.getId().equals("hudson.model.Item.Build")) {
 			return true;
 		} else
@@ -215,9 +217,11 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
 	}
 
 	private boolean checkReadPermission(Permission permission) {
-		if (permission.getId().equals("hudson.model.Hudson.Read")
-                || permission.getId().equals("hudson.model.Item.Workspace")
-				|| permission.getId().equals("hudson.model.Item.Read")) {
+        if (permission.equals(Hudson.READ)
+            || permission.equals(Item.READ)
+            || permission.equals(Item.CANCEL)
+            || permission.equals(Job.CANCEL)
+            || permission.equals(Job.CONFIGURE)) {
 			return true;
 		} else
 			return false;
@@ -230,8 +234,10 @@ public class GithubRequireOrganizationMembershipACL extends ACL {
             if (authenticatedUserCreateJobPermission) {
                 if (permission.equals(Item.READ) ||
                         permission.equals(Item.CONFIGURE) ||
+                        permission.equals(Item.CANCEL) ||
                         permission.equals(Item.DELETE) ||
-                        permission.equals(Item.EXTENDED_READ)) {
+                        permission.equals(Job.CANCEL) ||
+                        permission.equals(Job.CONFIGURE)) {
                     return true;
                 } else {
                     return false;
